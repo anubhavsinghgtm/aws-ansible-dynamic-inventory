@@ -1,0 +1,23 @@
+---
+# tasks file for web
+#
+- name: Installing Python3
+  package:
+    name: python3
+    state: present
+  become: true
+- name: Installing Apache Server
+  package: 
+    name: httpd 
+    state: present
+  become: true
+- name: copy web page from url
+  get_url:
+    dest: "{{ httpd_dest }}"
+    url: "{{ src_url }}"
+  become: true
+- name: Start Apache Service
+  service: 
+    name: httpd 
+    state: started
+  become: true

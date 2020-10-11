@@ -1,0 +1,49 @@
+---
+# tasks file for task2
+  - name: ec2 key-pair
+    ec2_key: 
+      name: task2_key
+      region: "{{ myregion }}"
+    register: my_task2_key
+  - name: copying to local
+    copy:
+      content: "{{my_task2_key.key.private_key}}"
+      dest: "{{key_destination}}"
+      mode: "0600"
+    when: my_task2_key.changed
+  - name: ec2 security group
+    ec2_group:
+      name: sg_task2
+      description: "Allow SSH and http"
+      region: "{{ myregion }}"
+      rules:
+      - proto: tcp
+        from_port: 80
+        to_port: 80
+        cidr_ip: 0.0.0.0/0
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 0.0.0.0/0
+      rules_egress:
+      - proto: all
+        cidr_ip: 0.0.0.0/0
+    register: my_sg
+  - name:
+    ec2:
+      group_id: "{{ my_sg.group_id }}"
+      key_name: task2_key
+      instance_type: t2.micro
+      image: "{{ image_id }}"
+      wait: yes
+      region: "{{ myregion }}"
+      count: 1
+      vpc_subnet_id: "{{ subnet_id }}"
+      assign_public_ip: yes
+      state: present
+    register: my_inst
+  - name: Refresh Inventory File
+    meta: refresh_inventory
+  - pause:
+      minutes: 2
+
