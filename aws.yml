@@ -1,0 +1,7 @@
+- hosts: localhost
+  roles:
+    - /etc/myroles/task2
+- hosts: ec2
+  user: ec2-user
+  roles:
+    - /etc/myroles/web
