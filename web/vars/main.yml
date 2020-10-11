@@ -1,5 +1,5 @@
 ---
 # vars file for web
   
-  src_url: "https://raw.githubusercontent.com/anubhavsinghgtm/aws-using-ansible/master/index.html"
+  src_url: "https://raw.githubusercontent.com/anubhavsinghgtm/aws-ansible-dynamic-inventory/master/index.html"
   httpd_dest: "var/www/html" 
